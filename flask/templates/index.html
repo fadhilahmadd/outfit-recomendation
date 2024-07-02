@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification</title>
+</head>
+<body>
+    <h1>Upload images for classification</h1>
+    <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" multiple>
+        <input type="submit" value="Upload and Classify">
+    </form>
+    <div id="results"></div>
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            const results = await response.json();
+            document.getElementById('results').innerHTML = results.map(result => `
+                <p>Filename: ${result.filename}</p>
+                <p>Class: ${result.class}</p>
+                <p>Confidence: ${result.confidence.toFixed(2)}</p>
+            `).join('');
+        };
+    </script>
+</body>
+</html>
