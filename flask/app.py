@@ -57,7 +57,7 @@ def predict():
         return "No files part in the request", 400
     
     results = []
-    class_indices = {0: 'Cool', 1: 'Neutral', 2: 'Warm'}
+    class_indices = {0: 'Tidak Diketahui', 1: 'Warm', 2: 'Neutral', 3: 'Cool'}
     
     for file in files:
         if file.filename == '':
