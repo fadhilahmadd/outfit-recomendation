@@ -10,6 +10,7 @@ from skimage.io import imread
 from skimage.transform import resize
 
 from routes.categories import categories_blueprint
+from routes.detail import detail_blueprint
 
 app = Flask(__name__, static_folder='img')
 CORS(app)
@@ -116,6 +117,7 @@ def predict_kmeans():
     return jsonify(results)
 
 app.register_blueprint(categories_blueprint)
+app.register_blueprint(detail_blueprint)
 
 if __name__ == "__main__":
     app.run(host="192.168.0.192",debug=True)

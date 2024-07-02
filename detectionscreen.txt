@@ -116,13 +116,13 @@ const DetectionScreen: React.FC = () => {
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        onPress={() => handlePrediction('http://192.168.71.39:5000/predict')}
+                        onPress={() => handlePrediction('http://192.168.0.192:5000/predict')}
                         style={[styles.button, styles.detectButton]}
                     >
                         <Text style={[styles.buttonText, styles.detectButtonText]}>Deteksi (CNN)</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => handlePrediction('http://192.168.71.39:5000/predict-kmeans')}
+                        onPress={() => handlePrediction('http://192.168.0.192:5000/predict-kmeans')}
                         style={[styles.button, styles.detectButton]}
                     >
                         <Text style={[styles.buttonText, styles.detectButtonText]}>Deteksi (K-means)</Text>

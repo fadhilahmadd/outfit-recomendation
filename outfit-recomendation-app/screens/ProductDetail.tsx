@@ -1,32 +1,49 @@
+import React, { useState, useEffect } from "react";
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import { Ionicons } from "@expo/vector-icons";
 import Spacing from "../constants/Spacing";
 import Colors from "../constants/Colors";
 import Font from "../constants/Font";
+import axios from 'axios';
 
-type Props = NativeStackScreenProps<RootStackParamList, "Product-detail">;
+type Props = NativeStackScreenProps<RootStackParamList, "ProductDetail">;
 
 const IMAGE_HEIGHT = 440;
 
 const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
-  const product = route.params.product;
+  const { idOutfit } = route.params;  // Get the outfit ID from route params
+  const [product, setProduct] = useState<any>(null);
 
-  const [activeColorIndex, setactiveColorIndex] = useState<number>(0)
-  const [activeSizeIndex, setactiveSizeIndex] = useState<number>(0)
+  useEffect(() => {
+    // Fetch product details based on the ID
+    const fetchProductDetails = async () => {
+      try {
+        const response = await axios.get(`http://192.168.0.192:5000/api/json/v1/detail/${idOutfit}`);
+        setProduct(response.data.detail[0]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProductDetails();
+  }, [idOutfit]);
+
+  if (!product) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeArea}>
       <ScrollView style={{ paddingHorizontal: Spacing * 2 }}>
 
         {/* Header */}
@@ -43,49 +60,85 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
         </View>
 
         {/* Gambar */}
-        <Image source={product.image} style={{ width: "100%", height: IMAGE_HEIGHT, borderRadius: Spacing * 6, marginVertical: Spacing }} />
+        <Image source={{ uri: product.strOutfitThumb }} style={{ width: "100%", height: IMAGE_HEIGHT, borderRadius: Spacing * 6, marginVertical: Spacing }} />
 
         {/* Nama & Warna */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignContent: "center", paddingVertical: Spacing }}>
-          <Text style={{ fontSize: Spacing * 3, fontFamily: Font["poppins-bold"], color: Colors.text }}>{product.name}</Text>
+          <Text style={{ fontSize: Spacing * 3, fontFamily: Font["poppins-bold"], color: Colors.text }}>{product.strOutfit}</Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {
-              product.colors.map((color, index) => (
+            {product.hexColor1 && (
+              <View
+                style={[
+                  {
+                    margin: Spacing / 5,
+                    borderRadius: Spacing * 2,
+                  },
+                ]}
+              >
                 <View
-                  key={color.id}
-                  style={[
-                    {
-                      margin: Spacing / 5,
-                      borderRadius: Spacing * 2
-                    },
-                    activeColorIndex === index && {
-                      borderWidth: Spacing / 2,
-                      borderColor: Colors.borderWithOpacity
-                    },
-                  ]}
-                >
-                  <TouchableOpacity
-                    onPress={() => setactiveColorIndex(index)}
-                    style={{
-                      backgroundColor: color.code,
-                      height: Spacing * 2,
-                      width: Spacing * 2,
-                      borderRadius: Spacing
-                    }}
-                  />
-                </View>
-              ))}
+                  style={{
+                    backgroundColor: `#${product.hexColor1}`,
+                    height: Spacing * 2,
+                    width: Spacing * 2,
+                    borderRadius: Spacing,
+                  }}
+                />
+              </View>
+            )}
+            {product.hexColor2 && (
+              <View
+                style={[
+                  {
+                    margin: Spacing / 5,
+                    borderRadius: Spacing * 2,
+                  },
+                ]}
+              >
+                <View
+                  style={{
+                    backgroundColor: `#${product.hexColor2}`,
+                    height: Spacing * 2,
+                    width: Spacing * 2,
+                    borderRadius: Spacing,
+                  }}
+                />
+              </View>
+            )}
+            {product.hexColor3 && (
+              <View
+                style={[
+                  {
+                    margin: Spacing / 5,
+                    borderRadius: Spacing * 2,
+                  },
+                ]}
+              >
+                <View
+                  style={{
+                    backgroundColor: `#${product.hexColor3}`,
+                    height: Spacing * 2,
+                    width: Spacing * 2,
+                    borderRadius: Spacing,
+                  }}
+                />
+              </View>
+            )}
           </View>
         </View>
 
         {/* Detail */}
-        <Text style={{color: Colors.text, fontFamily: Font["poppins-regular"], fontSize: Spacing * 1.4}}>{product.description}</Text>
-        
+        <Text style={{ color: Colors.text, fontFamily: Font["poppins-regular"], fontSize: Spacing * 1.4 }}>{product.strDescription}</Text>
+
       </ScrollView>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 };
 
 export default ProductDetail;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.background, // Ensure background color matches your design
+  },
+});

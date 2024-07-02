@@ -33,10 +33,10 @@ function RootNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-    >
+      >
       <Stack.Screen name="Deteksi" component={DetectionScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Product-detail" component={ProductDetail} />
+      <Stack.Screen name="ProductDetail" component={ProductDetail} />
     </Stack.Navigator>
   );
 }

@@ -10,38 +10,38 @@ def get_categories(categories):
             {
                 "idOutfit": "1001",
                 "strOutfit": "Outfit Cool 1",
-                "strOutfitThumb": "http://192.168.71.39:5000/img/outfit-1.jpg",
+                "strOutfitThumb": "http://192.168.0.192:5000/img/outfit-1.jpg",
             },
             {
                 "idOutfit": "1002",
                 "strOutfit": "Outfit Cool 2",
-                "strOutfitThumb": "http://192.168.71.39:5000/img/outfit-1.jpg",
+                "strOutfitThumb": "http://192.168.0.192:5000/img/35.jpg",
             },
         ]
     elif categories == 'Neutral':
         outfit = [
             {
                 "idOutfit": "2001",
-                "strOutfit": "Outfit Cool 1",
-                "strOutfitThumb": "http://192.168.71.39:5000/img/outfit-1.jpg",
+                "strOutfit": "Outfit Neutral 1",
+                "strOutfitThumb": "http://192.168.0.192:5000/img/outfit-1.jpg",
             },
             {
                 "idOutfit": "2002",
-                "strOutfit": "Outfit Cool 2",
-                "strOutfitThumb": "http://192.168.71.39:5000/img/outfit-1.jpg",
+                "strOutfit": "Outfit Neutral 2",
+                "strOutfitThumb": "http://192.168.0.192:5000/img/outfit-1.jpg",
             },
         ]
     elif categories == 'Warm':
         outfit = [
             {
                 "idOutfit": "3001",
-                "strOutfit": "Outfit Cool 1",
-                "strOutfitThumb": "http://192.168.71.39:5000/img/outfit-1.jpg",
+                "strOutfit": "Outfit Warm 1",
+                "strOutfitThumb": "http://192.168.0.192:5000/img/outfit-1.jpg",
             },
             {
                 "idOutfit": "3002",
-                "strOutfit": "Outfit Cool 2",
-                "strOutfitThumb": "http://192.168.71.39:5000/img/outfit-1.jpg",
+                "strOutfit": "Outfit Warm 2",
+                "strOutfitThumb": "http://192.168.0.192:5000/img/outfit-1.jpg",
             },
         ]
     else:

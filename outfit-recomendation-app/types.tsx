@@ -14,8 +14,8 @@ declare global {
 
 export type RootStackParamList = {
   Deteksi: undefined;
-  Home: undefined;
-  "Product-detail": { product: Product };
+  Home: { category: string };
+  ProductDetail: { idOutfit: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

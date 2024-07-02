@@ -16,6 +16,7 @@ import axios from 'axios';
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
+import { useNavigation } from '@react-navigation/native';  // Import useNavigation
 
 const { width } = Dimensions.get('window');
 const IMAGE_MAX_WIDTH = width * 0.9;
@@ -24,6 +25,7 @@ const DetectionScreen: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [imageWidth, setImageWidth] = useState<number>(0);
     const [imageHeight, setImageHeight] = useState<number>(0);
+    const navigation = useNavigation();  // Initialize navigation
 
     const handleUploadImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -83,8 +85,14 @@ const DetectionScreen: React.FC = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log(response.data);
-            Alert.alert("Prediction Results", JSON.stringify(response.data, null, 2));
+            const prediction = response.data[0].class;  // Assume the response is an array of results
+            console.log(prediction);
+            Alert.alert("Prediction Results", JSON.stringify(response.data, null, 2), [
+                {
+                    text: "OK",
+                    onPress: () => navigation.navigate('Home', { category: prediction })  // Navigate to Home with prediction
+                }
+            ]);
         } catch (error) {
             console.error(error);
             Alert.alert("Error", "Something went wrong while making the prediction.");
@@ -95,7 +103,7 @@ const DetectionScreen: React.FC = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Outfit Recomendation</Text>
+                    <Text style={styles.title}>Rekomendasi Warna Outfit Berdasarkan Warna Kulit</Text>
                 </View>
 
                 <View style={styles.buttonContainer}>
@@ -121,12 +129,6 @@ const DetectionScreen: React.FC = () => {
                     >
                         <Text style={[styles.buttonText, styles.detectButtonText]}>Deteksi (CNN)</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => handlePrediction('http://192.168.0.192:5000/predict-kmeans')}
-                        style={[styles.button, styles.detectButton]}
-                    >
-                        <Text style={[styles.buttonText, styles.detectButtonText]}>Deteksi (K-means)</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "center",
         marginVertical: Spacing * 2,
     },
     title: {
