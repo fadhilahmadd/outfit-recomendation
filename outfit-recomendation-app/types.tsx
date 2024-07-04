@@ -13,6 +13,7 @@ declare global {
 }
 
 export type RootStackParamList = {
+  Splash: undefined;
   Deteksi: undefined;
   Home: { category: string };
   ProductDetail: { idOutfit: string };

@@ -9,6 +9,9 @@ import {
     Image,
     Alert,
     Dimensions,
+    Platform,
+    StatusBar,
+    ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
@@ -16,7 +19,7 @@ import axios from 'axios';
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
-import { useNavigation } from '@react-navigation/native';  // Import useNavigation
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const IMAGE_MAX_WIDTH = width * 0.9;
@@ -25,7 +28,8 @@ const DetectionScreen: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [imageWidth, setImageWidth] = useState<number>(0);
     const [imageHeight, setImageHeight] = useState<number>(0);
-    const navigation = useNavigation();  // Initialize navigation
+    const [loading, setLoading] = useState<boolean>(false);
+    const navigation = useNavigation();
 
     const handleUploadImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -72,6 +76,8 @@ const DetectionScreen: React.FC = () => {
             return;
         }
 
+        setLoading(true);
+
         const formData = new FormData();
         formData.append('files', {
             uri: selectedImage,
@@ -85,17 +91,23 @@ const DetectionScreen: React.FC = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            const prediction = response.data[0].class;  // Assume the response is an array of results
+            const prediction = response.data[0].class;
             console.log(prediction);
-            Alert.alert("Prediction Results", JSON.stringify(response.data, null, 2), [
-                {
-                    text: "OK",
-                    onPress: () => navigation.navigate('Home', { category: prediction })  // Navigate to Home with prediction
-                }
-            ]);
+            if (prediction === "Tidak Diketahui") {
+                Alert.alert("Hasil Prediksi", "Prediction: Tidak Diketahui");
+            } else {
+                Alert.alert("Hasil Prediksi", JSON.stringify(response.data, null, 2), [
+                    {
+                        text: "OK",
+                        onPress: () => navigation.navigate('Home', { category: prediction })
+                    }
+                ]);
+            }
         } catch (error) {
             console.error(error);
             Alert.alert("Error", "Something went wrong while making the prediction.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -103,7 +115,14 @@ const DetectionScreen: React.FC = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Rekomendasi Warna Outfit Berdasarkan Warna Kulit</Text>
+                    <Text style={{ fontFamily: Font["poppins-semiBold"], fontSize: Spacing * 2, color: Colors.gold }}>
+                        Rekomendasi Outfit
+                    </Text>
+                </View>
+                <View style={styles.header}>
+                    <Text style={{ fontFamily: Font["poppins-semiBold"], fontSize: Spacing * 2, color: Colors.gold }}>
+                        Berdasarkan Korelasi Warna Kulit
+                    </Text>
                 </View>
 
                 <View style={styles.buttonContainer}>
@@ -124,10 +143,15 @@ const DetectionScreen: React.FC = () => {
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        onPress={() => handlePrediction('http://192.168.0.192:5000/predict')}
+                        onPress={() => handlePrediction('http://192.168.1.9:5000/yolo')}
                         style={[styles.button, styles.detectButton]}
+                        disabled={loading}
                     >
-                        <Text style={[styles.buttonText, styles.detectButtonText]}>Deteksi (CNN)</Text>
+                        {loading ? (
+                            <ActivityIndicator size="small" color={Colors.onPrimary} />
+                        ) : (
+                            <Text style={[styles.buttonText, styles.detectButtonText]}>Ayo Deteksi!</Text>
+                        )}
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -137,6 +161,9 @@ const DetectionScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        backgroundColor: Colors.background,
         paddingHorizontal: Spacing * 2,
     },
     scrollContainer: {
@@ -145,7 +172,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "center",
-        marginVertical: Spacing * 2,
+        alignItems: "center",
     },
     title: {
         fontFamily: Font["poppins-bold"],
@@ -156,6 +183,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginVertical: Spacing,
+        marginTop: Spacing * 2,
     },
     button: {
         backgroundColor: Colors.primary,
@@ -167,7 +195,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontFamily: Font["poppins-semiBold"],
-        color: Colors.onPrimary,
+        color: Colors.splash,
         fontSize: Spacing * 1.6,
     },
     detectButton: {
@@ -175,7 +203,7 @@ const styles = StyleSheet.create({
     },
     detectButtonText: {
         fontFamily: Font["poppins-semiBold"],
-        color: Colors.onPrimary,
+        color: Colors.splash,
         fontSize: Spacing * 1.6,
     },
 });

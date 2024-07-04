@@ -34,7 +34,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
     // Fetch outfits based on the category
     const fetchOutfits = async () => {
       try {
-        const response = await axios.get(`http://192.168.0.192:5000/api/json/categories/${category}`);
+        const response = await axios.get(`http://192.168.1.9:5000/api/json/categories/${category}`);
         setOutfits(response.data.outfit);
       } catch (error) {
         console.error(error);
@@ -48,28 +48,52 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Image source={user.image} style={styles.userImage} />
-            <Text style={styles.userName}>Hi, {user.name}</Text>
+          <View>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: Spacing / 2 }}>
+              <Ionicons name="arrow-back-outline" size={Spacing * 3} color={Colors.onPrimary} />
+            </TouchableOpacity>
           </View>
 
+          <Text style={{ fontFamily: Font["poppins-semiBold"], fontSize: Spacing * 2, color: Colors.gold }}>Rekomendasi Outfit</Text>
+
           <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="search-outline" size={Spacing * 3} color={Colors.text} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="cart-outline" size={Spacing * 3} color={Colors.text} />
+            <TouchableOpacity style={{ padding: Spacing / 2 }}>
+              <Ionicons name="search-outline" size={Spacing * 3} style={{color: Colors.splash}} />
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.introTextContainer}>
-          <Text style={styles.introText}>Explore the best<Text style={styles.introTextHighlight}> Outfits</Text></Text>
+          <Text style={styles.introText}>Bersinar dengan<Text style={styles.introTextHighlight}> Warna </Text> yang tepat</Text>
         </View>
 
-        <View style={styles.recommendedTextContainer}>
-          <Text style={styles.recommendedText}>Direkomendasikan untuk {category}</Text>
-        </View>
+        <Text style={{ fontSize: Spacing * 2, fontFamily: Font["poppins-semiBold"], color: Colors.onPrimary }}>Kategori Undertone</Text>
+        <ScrollView horizontal contentContainerStyle={{ paddingVertical: Spacing }}>
+          {
+            <TouchableOpacity
+              style={[
+                {
+                  paddingHorizontal: Spacing * 2,
+                  paddingVertical: Spacing / 2,
+                  borderWidth: 1,
+                  borderRadius: Spacing * 2,
+                  borderColor: Colors.border,
+                  marginRight: Spacing,
+                  backgroundColor: Colors.primary,
+                },
+              ]}
+            >
+              <Text
+                style={{
+                  color: Colors.onPrimary,
+                  fontSize: Spacing * 1.4,
+                  fontFamily: Font["poppins-regular"]
+                }}
+              >
+                {category}
+              </Text>
+            </TouchableOpacity>}
+        </ScrollView>
 
         <View style={styles.outfitsContainer}>
           {outfits.map((item, index) => (
@@ -134,7 +158,7 @@ const styles = StyleSheet.create({
   introText: {
     fontSize: Spacing * 3.5,
     fontFamily: Font["poppins-bold"],
-    color: Colors.text,
+    color: Colors.onPrimary,
   },
   introTextHighlight: {
     fontSize: Spacing * 4,

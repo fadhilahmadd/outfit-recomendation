@@ -12,6 +12,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ProductDetail from "../screens/ProductDetail";
 import { RootStackParamList } from "../types";
 import DetectionScreen from "../screens/DetectionScreen";
+import SplashScreen from "../screens/SplashScreen";
 
 export default function Navigation() {
   return (
@@ -33,7 +34,9 @@ function RootNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-      >
+      initialRouteName="Splash"
+    >
+      <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Deteksi" component={DetectionScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="ProductDetail" component={ProductDetail} />

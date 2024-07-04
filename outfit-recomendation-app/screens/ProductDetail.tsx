@@ -28,7 +28,7 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
     // Fetch product details based on the ID
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://192.168.0.192:5000/api/json/v1/detail/${idOutfit}`);
+        const response = await axios.get(`http://192.168.1.9:5000/api/json/v1/detail/${idOutfit}`);
         setProduct(response.data.detail[0]);
       } catch (error) {
         console.error(error);
@@ -49,13 +49,13 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
         {/* Header */}
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: Spacing / 2 }}>
-            <Ionicons name="arrow-back-outline" size={Spacing * 3} color={Colors.text} />
+            <Ionicons name="arrow-back-outline" size={Spacing * 3} color={Colors.onPrimary} />
           </TouchableOpacity>
 
-          <Text style={{ fontFamily: Font["poppins-semiBold"], fontSize: Spacing * 2, color: Colors.text }}>Detail</Text>
+          <Text style={{ fontFamily: Font["poppins-semiBold"], fontSize: Spacing * 2, color: Colors.onPrimary }}>Detail</Text>
 
-          <TouchableOpacity>
-            <Ionicons size={Spacing * 3} />
+          <TouchableOpacity style={{ padding: Spacing / 2 }}>
+            <Ionicons name="search-outline" size={Spacing * 3} style={{color: Colors.splash}} />
           </TouchableOpacity>
         </View>
 
@@ -64,7 +64,7 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
 
         {/* Nama & Warna */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignContent: "center", paddingVertical: Spacing }}>
-          <Text style={{ fontSize: Spacing * 3, fontFamily: Font["poppins-bold"], color: Colors.text }}>{product.strOutfit}</Text>
+          <Text style={{ fontSize: Spacing * 3, fontFamily: Font["poppins-bold"], color: Colors.gold }}>{product.strOutfit}</Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {product.hexColor1 && (
               <View
@@ -72,6 +72,8 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
                   {
                     margin: Spacing / 5,
                     borderRadius: Spacing * 2,
+                    borderWidth: 1,
+                    borderColor: 'white'
                   },
                 ]}
               >
@@ -91,6 +93,8 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
                   {
                     margin: Spacing / 5,
                     borderRadius: Spacing * 2,
+                    borderWidth: 1,
+                    borderColor: 'white'
                   },
                 ]}
               >
@@ -110,6 +114,8 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
                   {
                     margin: Spacing / 5,
                     borderRadius: Spacing * 2,
+                    borderWidth: 1,
+                    borderColor: 'white',
                   },
                 ]}
               >
@@ -127,7 +133,7 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
         </View>
 
         {/* Detail */}
-        <Text style={{ color: Colors.text, fontFamily: Font["poppins-regular"], fontSize: Spacing * 1.4 }}>{product.strDescription}</Text>
+        <Text style={{ color: Colors.onPrimary, fontFamily: Font["poppins-regular"], fontSize: Spacing * 1.4 }}>{product.strDescription}</Text>
 
       </ScrollView>
     </SafeAreaView>

@@ -16,7 +16,7 @@ app = Flask(__name__, static_folder='img')
 CORS(app)
 
 # CNN
-MODEL_PATH = '/Users/fadhilahmad/Documents/filry/flask/model/Warna Kulit-Warna Kulit -63.73.h5'
+MODEL_PATH = '/Users/fadhilahmad/Documents/filry/flask/model/Warna Kulit-Warna Kulit -64.75.h5'
 
 model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), 
@@ -120,4 +120,4 @@ app.register_blueprint(categories_blueprint)
 app.register_blueprint(detail_blueprint)
 
 if __name__ == "__main__":
-    app.run(host="192.168.0.192",debug=True)
+    app.run(host="192.168.1.9",debug=True)
